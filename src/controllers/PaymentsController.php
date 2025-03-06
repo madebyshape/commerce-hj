@@ -384,41 +384,41 @@ class PaymentsController extends BaseFrontEndController
         $updateCartSearchIndexes = Plugin::getInstance()->getSettings()->updateCartSearchIndexes;
         $updateSearchIndex = ($order->isCompleted || $updateCartSearchIndexes);
 
-        if (Craft::$app->getElements()->saveElement($order, true, false, $updateSearchIndex)) {
-            // Has the order changed in a significant way?
-            if ($totalPriceChanged || $totalQtyChanged || $totalAdjustmentsChanged) {
-                if ($totalPriceChanged) {
-                    $order->addError('totalPrice', Craft::t('commerce', 'The total price of the order changed.'));
-                }
+        // if (Craft::$app->getElements()->saveElement($order, true, false, $updateSearchIndex)) {
+        //     // Has the order changed in a significant way?
+        //     if ($totalPriceChanged || $totalQtyChanged || $totalAdjustmentsChanged) {
+        //         if ($totalPriceChanged) {
+        //             $order->addError('totalPrice', Craft::t('commerce', 'The total price of the order changed.'));
+        //         }
 
-                if ($totalQtyChanged) {
-                    $order->addError('totalQty', Craft::t('commerce', 'The total quantity of items within the order changed.'));
-                }
+        //         if ($totalQtyChanged) {
+        //             $order->addError('totalQty', Craft::t('commerce', 'The total quantity of items within the order changed.'));
+        //         }
 
-                if ($totalAdjustmentsChanged) {
-                    $order->addError('totalAdjustments', Craft::t('commerce', 'The total number of order adjustments changed.'));
-                }
+        //         if ($totalAdjustmentsChanged) {
+        //             $order->addError('totalAdjustments', Craft::t('commerce', 'The total number of order adjustments changed.'));
+        //         }
 
-                $error = Craft::t('commerce', 'Something changed with the order before payment, please review your order and submit payment again.');
+        //         $error = Craft::t('commerce', 'Something changed with the order before payment, please review your order and submit payment again.');
 
-                if ($useMutex && isset($mutex, $lockName)) {
-                    $mutex->release($lockName);
-                }
+        //         if ($useMutex && isset($mutex, $lockName)) {
+        //             $mutex->release($lockName);
+        //         }
 
-                return $this->asModelFailure(
-                    $paymentForm,
-                    $error,
-                    'paymentForm',
-                    [
-                        $this->_cartVariableName => $this->cartArray($order),
-                        'paymentFormErrors' => $paymentForm->getErrors(),
-                    ],
-                    [
-                        $this->_cartVariableName => $order,
-                    ]
-                );
-            }
-        }
+        //         return $this->asModelFailure(
+        //             $paymentForm,
+        //             $error,
+        //             'paymentForm',
+        //             [
+        //                 $this->_cartVariableName => $this->cartArray($order),
+        //                 'paymentFormErrors' => $paymentForm->getErrors(),
+        //             ],
+        //             [
+        //                 $this->_cartVariableName => $order,
+        //             ]
+        //         );
+        //     }
+        // }
 
         if ($useMutex && isset($mutex, $lockName)) {
             $mutex->release($lockName);
