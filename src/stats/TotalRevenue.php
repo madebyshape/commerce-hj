@@ -44,15 +44,27 @@ class TotalRevenue extends Stat
      */
     public function getData(): ?array
     {
-        return $this->_createChartQuery(
-            [
-                new Expression(sprintf('SUM([[%s]]) as revenue', $this->type)),
-                new Expression('COUNT([[orders.id]]) as count'),
-            ],
-            [
-                'revenue' => 0,
-                'count' => 0,
-            ]
-        );
+        $query = $this->_createStatQuery();
+        $query->select([new Expression('COUNT([[orders.id]]) as total')]);
+        $query->andWhere(['not', ['orderStatusId' => 7]]);
+
+        return $chartData = $this->_createChartQuery([
+            new Expression('SUM([[total]]) as revenue'),
+            new Expression('COUNT([[orders.id]]) as count'),
+        ], [
+            'revenue' => 0,
+            'count' => 0,
+        ], $query);
+
+        // return $this->_createChartQuery(
+        //     [
+        //         new Expression(sprintf('SUM([[%s]]) as revenue', $this->type)),
+        //         new Expression('COUNT([[orders.id]]) as count'),
+        //     ],
+        //     [
+        //         'revenue' => 0,
+        //         'count' => 0,
+        //     ]
+        // );
     }
 }

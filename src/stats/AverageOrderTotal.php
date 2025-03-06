@@ -29,7 +29,8 @@ class AverageOrderTotal extends Stat
     public function getData(): string|int|bool|null
     {
         $query = $this->_createStatQuery();
-        $query->select([new Expression('ROUND(SUM([[total]]) / COUNT([[orders.id]]), 4) as averageOrderTotal')]);
+        // $query->select([new Expression('ROUND(SUM([[total]]) / COUNT([[orders.id]]), 4) as averageOrderTotal')]);
+        $query->select([new Expression('ROUND(SUM([[total]]) / COUNT([[orders.id]]), 4) as averageOrderTotal')])->where(['!=', 'orderStatusId', 7]);
 
         return $query->scalar();
     }

@@ -29,7 +29,9 @@ class TotalOrders extends Stat
     public function getData(): array
     {
         $query = $this->_createStatQuery();
+        // $query->select([new Expression('COUNT([[orders.id]]) as total')]);
         $query->select([new Expression('COUNT([[orders.id]]) as total')]);
+        $query->andWhere(['not', ['orderStatusId' => 7]]);
 
         $chartData = $this->_createChartQuery([
             new Expression('COUNT([[orders.id]]) as total'),

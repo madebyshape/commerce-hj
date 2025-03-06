@@ -52,7 +52,7 @@ class TotalOrdersByCountry extends Stat
         $query->select([
             'countryCode' => ($this->type == 'billing' ? '[[b.countryCode]]' : '[[s.countryCode]]'),
             'total' => new Expression('COUNT([[orders.id]])'),
-        ]);
+            ])->where(['!=', 'orderStatusId', 7]);
         $query->leftJoin(CraftTable::ADDRESSES . ' s', '[[s.id]] = [[orders.shippingAddressId]]');
         $query->leftJoin(CraftTable::ADDRESSES . ' b', '[[b.id]] = [[orders.billingAddressId]]');
 
